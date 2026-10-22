@@ -1,0 +1,12 @@
+docker {
+	position: absolute;
+    display: flex;
+    
+    width: 100%;
+    height: 100%;
+
+    align-items: end;
+    justify-content: center;
+
+    z-index: 10000;
+}
