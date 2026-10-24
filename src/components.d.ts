@@ -7,6 +7,16 @@ declare namespace React {
             info: component<HTMLElement>;
             actions: component<HTMLElement>;
             halo: component<HTMLAttributes>;
+            marquee: component<HTMLAttributes> & {
+                scrollamount?: string;
+                scrolldelay?: string;
+                direction?: "up" | "down" | "left" | "right";
+                behavior?: "scrolling" | "sliding" | "alternate";
+                loop?: string;
+                bgcolor?: string;
+                vspace?: string;
+                hspace?: string;
+            };
 
             "song-title": component<HTMLElement>;
             "artist-name": component<HTMLElement>;

@@ -7,14 +7,16 @@ import { getAudioMetadata } from "../../audiometa/audiometa";
 export default function Docker(): ReactNode {
     const ongaku = useOngaku();
 
+    const cover = "https://i.scdn.co/image/ab67616d00001e020b6b1eb7f04cd1c433dd596e";
+
     useEffect(() => {
-        // ongaku.player.setCurrentSong({
-        //     artist: "Unknown",
-        //     coverUrl: cover,
-        //     path: "",
-        //     title: "Some Title"
-        // });
-        getAudioMetadata("C:/Users/itsno/Music/SV - えいぷ.mp3")
+        ongaku.player.setCurrentSong({
+            artist: "Unknown",
+            coverUrl: cover,
+            path: "",
+            title: "Some Title"
+        });
+        getAudioMetadata("C:/Users/itsno/Music/D⧸N⧸A ⧸ 25時、ナイトコードで。 × 鏡音リン.mp3")
             .then(meta => {
                 ongaku.player.setCurrentSong(meta);
             })

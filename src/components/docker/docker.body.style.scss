@@ -9,11 +9,11 @@ docker-container docker docker-body {
     
     flex-direction: column;
 
-    z-index: 1002;
-
     opacity: 0;
-
+    
     transition: opacity 100ms ease-out;
+    
+    z-index: 1002;
 
     content {
         display: flex;
@@ -22,7 +22,7 @@ docker-container docker docker-body {
         align-items: center;
         justify-content: space-between;
 
-        height: calc(100% - 5px);
+        height: calc(100% - 23px);
 
         padding: 10px 15px;
 
@@ -35,6 +35,7 @@ docker-container docker docker-body {
 
             img {
                 width: 40px;
+                height: 40px;
                 aspect-ratio: 1 / 1;
 
                 border: none;
@@ -49,31 +50,27 @@ docker-container docker docker-body {
                 justify-content: center;
 
                 flex-direction: column;
-                gap: 2px;
 
                 color: colors.$text-color;
 
                 song-title {
                     overflow: hidden;
+                    width: 100%;
 
                     white-space: nowrap;
-                    box-sizing: border-box;
 
-                    text {
-                        display: inline-block;
-
-                        padding-left: 100%;
-
-                        animation: marquee 10s linear infinite;
-
-                        &:hover {
-                            animation-play-state: paused;
-                        }
-                    }
+                    font-size: 14px;
+                    font-weight: 800;
+                    line-height: 14px;
                 }
 
                 artist-name {
+                    overflow: hidden;
+
                     font-size: 12px;
+                    font-weight: 600;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
 
                     opacity: 0.5;
                 }
@@ -111,9 +108,4 @@ docker-container docker docker-body {
 
 docker-container docker.active docker-body {
     opacity: 1;
-}
-
-@keyframes marquee {
-    0%   { transform: translate(0, 0); }
-    100% { transform: translate(-170%, 0); }
 }

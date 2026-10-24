@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { FaHeart, FaRegHeart, FaPlay, FaPause } from "react-icons/fa";
 import ProgressBar from "../progressbar/progressbar";
 import "./docker.body.style.scss";
@@ -18,9 +18,11 @@ export default function DockerBody({
                     <img src={ meta.coverUrl! } loading="lazy" />
                     <text>
                         <song-title>
-                            <text>
+                            <marquee
+                                scrollamount="2"
+                            >
                                 { meta.title }
-                            </text>
+                            </marquee>
                         </song-title>
                         <artist-name>
                             • { meta.artist }
@@ -47,9 +49,6 @@ export default function DockerBody({
             <ProgressBar 
                 value={ 50 }
                 height="3px"
-                style={{
-                    transform: "translateY(-4px)"
-                }}
             />
         </docker-body>
     );

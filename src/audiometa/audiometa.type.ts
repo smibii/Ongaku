@@ -3,4 +3,5 @@ export default interface AudioMetadata {
     artist: string;
     coverUrl: string | null;
     path: string;
+    duration?: number;
 }

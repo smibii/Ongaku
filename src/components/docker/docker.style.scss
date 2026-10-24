@@ -1,37 +1,6 @@
 @use "../../colors.scss";
 @use "../../functions.scss";
 
-@keyframes docker-pop {
-    50% {
-        height: 70%;
-        width: 40%;
-        border-radius: 30px;
-    }
-    100% {
-        height: 95%;
-        width: 95%;
-        border-radius: 10px;
-    }
-}
-
-@keyframes docker-pop-rev {
-    0% {
-        height: 95%;
-        width: 95%;
-        border-radius: 10px;
-    }
-    50% {
-        height: 70%;
-        width: 40%;
-        border-radius: 30px;
-    }
-    100% {
-        height: 0;
-        width: 30%;
-        border-radius: 30px;
-    }
-}
-
 docker-container docker {
     position: relative;
 
@@ -39,6 +8,8 @@ docker-container docker {
     height: 0;
 
     background-color: functions.white-mix(colors.$background-color, 90%);
+
+    box-shadow: 0 3px 5px functions.alpha-mix(black, 30%);
 
     border: none;
     border-radius: 50px;
@@ -73,4 +44,35 @@ docker-container docker {
 
 body.light-mode docker-container docker {
     background-color: functions.black-mix(colors.$background-color, 90%);
+}
+
+@keyframes docker-pop {
+    50% {
+        height: 70%;
+        width: 40%;
+        border-radius: 30px;
+    }
+    100% {
+        height: 95%;
+        width: 95%;
+        border-radius: 10px;
+    }
+}
+
+@keyframes docker-pop-rev {
+    0% {
+        height: 95%;
+        width: 95%;
+        border-radius: 10px;
+    }
+    50% {
+        height: 70%;
+        width: 40%;
+        border-radius: 30px;
+    }
+    100% {
+        height: 0;
+        width: 30%;
+        border-radius: 30px;
+    }
 }
