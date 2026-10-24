@@ -48,7 +48,7 @@ export default function DockerBody({
                 value={ 50 }
                 height="3px"
                 style={{
-                    transform: "translateY(-3px)"
+                    transform: "translateY(-4px)"
                 }}
             />
         </docker-body>
