@@ -1,0 +1,11 @@
+@function alpha-mix($color, $opacity) {
+    @return color-mix(in srgb, $color $opacity, transparent);
+}
+
+@function black-mix($color, $opacity) {
+    @return color-mix(in oklch, $color $opacity, black);
+}
+
+@function white-mix($color, $opacity) {
+    @return color-mix(in oklch, $color $opacity, white);
+}

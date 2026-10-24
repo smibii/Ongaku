@@ -1,50 +1,38 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import "./docker.style.scss";
 import { useOngaku } from "../../providers/ongaku.context";
-import { FaHeart, FaRegHeart, FaPlay } from "react-icons/fa";
+import DockerBody from "./docker.body";
 
 export default function Docker(): ReactNode {
     const ongaku = useOngaku();
 
-    const image = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSi9NMmpMQYDbPl2iXBFp3ODX019fdilWMJxhSyZ3yAkBnIl1c_hwFK7qo&s=10";
+    const cover = "https://i.scdn.co/image/ab67616d00001e020b6b1eb7f04cd1c433dd596e";
+
+    useEffect(() => {
+        ongaku.player.setCurrentSong({
+            artist: "Unknown",
+            coverUrl: cover,
+            path: "",
+            title: "Some Title"
+        });
+    }, []);
 
     return (
         <docker
-            className={ ongaku.showDocker ? "active" : "" }
-        >            
-            <dockerbody>
-                <content>
-                    <info>
-                        <img src={ image } />
-                        <text>
-                            <songtitle>
-                                Song
-                            </songtitle>
-                            <artistname>
-                                Artist
-                            </artistname>
-                        </text>
-                    </info>
+            className={
+                ongaku.showDocker && ongaku.player.currentSong 
+                    ? "active" : ""
+            }
+        >
+            { ongaku.player.currentSong && (
+                <>
+                    <DockerBody meta={ ongaku.player.currentSong! } />
 
-                    <actions>
-                        <button>
-                            <FaHeart />
-                        </button>
-                        <button>
-                            <FaPlay />
-                        </button>
-                    </actions>
-                </content>
-
-                <progress
-                    max={ 100 }
-                    value={ 50 }
-                />
-            </dockerbody>
-
-            <halo>
-                <img src={ image } />
-            </halo>
+                    <halo>
+                        <img src={ ongaku.player.currentSong?.coverUrl! } loading="lazy" />
+                    </halo>
+                </>
+            )}
         </docker>
     );
 }

@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { useOngaku } from "../../providers/ongaku.context.tsx";
+import "./home.style.scss";
 
 export default function Home(): ReactNode {
     const ongaku = useOngaku();
@@ -15,6 +16,26 @@ export default function Home(): ReactNode {
             >
                 Click!
             </button>
+
+            <button
+                onClick={
+                    () => {
+                        ongaku.setLightMode(!ongaku.lightMode);
+                    }
+                }
+            >
+                Light Mode
+            </button>
+
+            <input
+                type="range"
+                max={ 355 }
+                onChange={
+                    e => {
+                        ongaku.setBackgroundHue(parseInt(e.target.value));
+                    }
+                } 
+            />
         </home>
     );
 }

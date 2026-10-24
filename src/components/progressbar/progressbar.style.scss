@@ -1,0 +1,18 @@
+@use "../../colors.scss";
+@use "../../functions.scss";
+
+progress-bar {
+    display: flex;
+
+    flex-shrink: 0;
+
+    background-color: functions.alpha-mix(colors.$text-color, 20%);
+
+    progress-track {
+        display: flex;
+
+        height: 100%;
+
+        background-color: colors.$text-color;
+    }
+}

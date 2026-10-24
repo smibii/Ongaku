@@ -1,0 +1,19 @@
+@property --hue {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 0;
+}
+
+body {
+    --hue: 0;
+    --background-color: hsl(var(--hue), 50%, 15%);
+    --text-color: rgba(255, 255, 255, 1);
+
+    &.light-mode {
+        --background-color: hsl(var(--hue), 80%, 80%);
+        --text-color: rgb(3 , 3, 3);
+    }
+}
+
+$background-color: var(--background-color);
+$text-color: var(--text-color);

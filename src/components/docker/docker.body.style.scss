@@ -1,0 +1,93 @@
+@use "../../colors.scss";
+
+docker-container docker docker-body {
+    position: absolute;
+    display: flex;
+
+    width: 100%;
+    height: 100%;
+    
+    flex-direction: column;
+
+    z-index: 1002;
+
+    opacity: 0;
+
+    transition: opacity 100ms ease-out;
+
+    content {
+        display: flex;
+
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+
+        height: calc(100% - 5px);
+
+        padding: 10px 15px;
+
+        info {
+            display: flex;
+
+            gap: 10px;
+
+            img {
+                width: 40px;
+                aspect-ratio: 1 / 1;
+
+                border: none;
+                border-radius: 5px;
+            }
+
+            text {
+                display: flex;
+
+                justify-content: center;
+
+                flex-direction: column;
+                gap: 2px;
+
+                color: colors.$text-color;
+
+                artist-name {
+                    font-size: 12px;
+
+                    opacity: 0.5;
+                }
+            }
+        }
+
+        actions {
+            display: flex;
+
+            gap: 5px;
+
+            // padding-right: 5px;
+
+            button {
+                display: flex;
+
+                align-items: center;
+                justify-content: center;
+
+                width: 40px;
+                height: 40px;
+
+                cursor: pointer;
+
+                border: none;
+
+                color: colors.$text-color;
+                background-color: transparent;
+
+                padding: 10px;
+
+                font-size: 17px;
+            }
+        }
+    }
+}
+
+docker-container docker.active docker-body {
+    opacity: 1;
+}

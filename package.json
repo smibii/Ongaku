@@ -12,6 +12,8 @@
   "dependencies": {
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-opener": "^2",
+    "@types/jsmediatags": "^3.9.6",
+    "jsmediatags": "^3.9.7",
     "react": "^19.1.0",
     "react-doctor": "^0.9.18",
     "react-dom": "^19.1.0",

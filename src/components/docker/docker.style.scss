@@ -1,124 +1,76 @@
-docker {
+@use "../../colors.scss";
+@use "../../functions.scss";
+
+@keyframes docker-pop {
+    50% {
+        height: 70%;
+        width: 40%;
+        border-radius: 30px;
+    }
+    100% {
+        height: 95%;
+        width: 95%;
+        border-radius: 10px;
+    }
+}
+
+@keyframes docker-pop-rev {
+    0% {
+        height: 95%;
+        width: 95%;
+        border-radius: 10px;
+    }
+    50% {
+        height: 70%;
+        width: 40%;
+        border-radius: 30px;
+    }
+    100% {
+        height: 0;
+        width: 30%;
+        border-radius: 30px;
+    }
+}
+
+docker-container docker {
     position: relative;
 
-    width: 95%;
-    height: 95%;
+    width: 30%;
+    height: 0;
 
-    background-color: black;
+    background-color: functions.white-mix(colors.$background-color, 90%);
 
     border: none;
-    border-radius: 10px;
+    border-radius: 50px;
 
     overflow: hidden;
 
     pointer-events: all;
 
     &.active {
-        transform: translateY(0);
+        animation: docker-pop 200ms ease-out forwards;
     }
+    
+    animation: docker-pop-rev 200ms ease-out forwards;
 
-    transform: translateY(110%);
-    transition: transform 200ms ease-out;
+    // transition: width 300ms ease-out, height 200ms ease-out, border-radius 200ms ease-out;
 
-    dockerbody {
+    halo img {
         position: absolute;
         display: flex;
 
         width: 100%;
-        height: 100%;
-        
-        flex-direction: column;
+        aspect-ratio: 1 / 1;
 
-        z-index: 1002;
+        transform: translateY(-50%) translateX(-30%);
+        opacity: 50%;
 
-        content {
-            display: flex;
-    
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-between;
-    
-            height: calc(100% - 5px);
-    
-            padding: 10px 15px;
-    
-            info {
-                display: flex;
-    
-                gap: 5px;
-    
-                img {
-                    width: 40px;
+        z-index: 1001;
 
-                    border: none;
-                    border-radius: 5px;
-                }
-    
-                text {
-                    display: flex;
-    
-                    justify-content: center;
-    
-                    flex-direction: column;
-                    gap: 2px;
-    
-                    color: white;
-    
-                    artistname {
-                        font-size: 12px;
-    
-                        opacity: 0.5;
-                    }
-                }
-            }
-    
-            actions {
-                display: flex;
-    
-                gap: 10px;
-
-                padding-right: 10px;
-
-                button {
-                    cursor: pointer;
-
-                    border: none;
-
-                    color: white;
-                    background-color: transparent;
-
-                    font-size: 17px;
-                }
-            }
-        }
-    
-        progress {
-            display: flex;
-    
-            width: 100%;
-            height: 5px;
-    
-            border: none;
-    
-            transform: translateY(-3px);
-        }
+        filter: blur(50px);
     }
+}
 
-    halo {
-        pointer-events: none;
-
-        img {
-            position: absolute;
-            display: flex;
-
-            width: 100%;
-
-            transform: translateY(-50%) translateX(-30%);
-            opacity: 50%;
-
-            z-index: 1001;
-
-            filter: blur(50px);
-        }
-    }
+body.light-mode docker-container docker {
+    background-color: functions.black-mix(colors.$background-color, 90%);
 }
