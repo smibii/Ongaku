@@ -1,30 +1,39 @@
+import { readFile } from "@tauri-apps/plugin-fs";
 import jsmediatags from "jsmediatags";
-import AudioMetadata from "./mp3meta.type";
+import AudioMetadata from "./audiometa.type";
 
-export function getAudioMetadata(path: string): Promise<AudioMetadata> {
-    return new Promise((resolve, reject) => {
-        jsmediatags.read(path, {
-            onSuccess: (tag) => {
-                const { title, artist, picture } = tag.tags;
-                let coverUrl: string | null = null;
+export async function getAudioMetadata(path: string): Promise<AudioMetadata> {
+    try {
+        const fileContents = await readFile(path);
 
-                if (picture) {
-                    const { data, format } = picture;
-                    const byteArray = new Uint8Array(data);
-                    const blob = new Blob([byteArray], { type: format });
-                    coverUrl = URL.createObjectURL(blob);
+        const blob = new Blob([fileContents], { type: 'audio/mp3' });
+
+        return new Promise((resolve, reject) => {
+            jsmediatags.read(blob, {
+                onSuccess: (tag) => {
+                    const { title, artist, picture } = tag.tags;
+                    let coverUrl: string | null = null;
+
+                    if (picture) {
+                        const { data, format } = picture;
+                        const byteArray = new Uint8Array(data);
+                        const imgBlob = new Blob([byteArray], { type: format });
+                        coverUrl = URL.createObjectURL(imgBlob);
+                    }
+
+                    resolve({
+                        title: title || 'Unknown Title',
+                        artist: artist || 'Unknown Artist',
+                        coverUrl: coverUrl,
+                        path
+                    });
+                },
+                onError: (error) => {
+                    reject(error);
                 }
-
-                resolve({
-                    title: title!,
-                    artist: artist || 'Unbekannter Künstler',
-                    coverUrl: coverUrl,
-                    path
-                });
-            },
-            onError: (error) => {
-                reject(error);
-            }
+            });
         });
-    });
+    } catch (error) {
+        throw new Error(`Tauri FS Error: ${error}`);
+    }
 }

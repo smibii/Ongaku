@@ -27,6 +27,16 @@ export default function Home(): ReactNode {
                 Light Mode
             </button>
 
+            <button
+                onClick={
+                    () => {
+                        ongaku.setRainbowMode(!ongaku.rainbowMode);
+                    }
+                }
+            >
+                Rainbow
+            </button>
+
             <input
                 type="range"
                 max={ 355 }

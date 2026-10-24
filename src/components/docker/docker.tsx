@@ -2,6 +2,7 @@ import { ReactNode, useEffect } from "react";
 import "./docker.style.scss";
 import { useOngaku } from "../../providers/ongaku.context";
 import DockerBody from "./docker.body";
+import { getAudioMetadata } from "../../audiometa/audiometa";
 
 export default function Docker(): ReactNode {
     const ongaku = useOngaku();
@@ -9,12 +10,19 @@ export default function Docker(): ReactNode {
     const cover = "https://i.scdn.co/image/ab67616d00001e020b6b1eb7f04cd1c433dd596e";
 
     useEffect(() => {
-        ongaku.player.setCurrentSong({
-            artist: "Unknown",
-            coverUrl: cover,
-            path: "",
-            title: "Some Title"
-        });
+        // ongaku.player.setCurrentSong({
+        //     artist: "Unknown",
+        //     coverUrl: cover,
+        //     path: "",
+        //     title: "Some Title"
+        // });
+        getAudioMetadata("C:/Users/itsno/Music/ユメミ ⧸ ルウル.mp3")
+            .then(meta => {
+                ongaku.player.setCurrentSong(meta);
+            })
+            .catch(e => {
+                console.log(e);
+            })
     }, []);
 
     return (

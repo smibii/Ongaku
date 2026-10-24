@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import { FaHeart, FaRegHeart, FaPlay, FaPause } from "react-icons/fa";
 import ProgressBar from "../progressbar/progressbar";
 import "./docker.body.style.scss";
-import AudioMetadata from "../../audiometa/mp3meta.type";
+import AudioMetadata from "../../audiometa/audiometa.type";
 import { useOngaku } from "../../providers/ongaku.context";
 
 export default function DockerBody({
@@ -18,7 +18,9 @@ export default function DockerBody({
                     <img src={ meta.coverUrl! } loading="lazy" />
                     <text>
                         <song-title>
-                            { meta.title }
+                            <text>
+                                { meta.title }
+                            </text>
                         </song-title>
                         <artist-name>
                             • { meta.artist }
@@ -44,9 +46,9 @@ export default function DockerBody({
 
             <ProgressBar 
                 value={ 50 }
-                height="4px"
+                height="3px"
                 style={{
-                    transform: "translateY(-2px)"
+                    transform: "translateY(-3px)"
                 }}
             />
         </docker-body>

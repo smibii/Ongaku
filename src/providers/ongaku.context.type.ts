@@ -1,8 +1,11 @@
-import AudioMetadata from "../audiometa/mp3meta.type";
+import AudioMetadata from "../audiometa/audiometa.type";
 
 export default interface IOngakuContext {
     lightMode: boolean;
     setLightMode: (value: boolean) => void;
+    rainbowMode: boolean;
+    setRainbowMode: (value: boolean) => void;
+
     showDocker: boolean;
     setShowDocker: (value: boolean) => void;
     backgroundHue: number;

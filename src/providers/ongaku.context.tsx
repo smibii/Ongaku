@@ -1,6 +1,6 @@
 import {createContext, ReactNode, useContext, useState} from "react";
 import IOngakuContext from "./ongaku.context.type.ts";
-import AudioMetadata from "../audiometa/mp3meta.type.ts";
+import AudioMetadata from "../audiometa/audiometa.type.ts";
 
 export const OngakuContext = createContext<IOngakuContext | null>(null);
 
@@ -14,6 +14,8 @@ export function OngakuProvider(
     { children }: { children: ReactNode }
 ): ReactNode {
     const [lightMode, setLightMode] = useState<boolean>(false);
+    const [rainbowMode, setRainbowMode] = useState<boolean>(false);
+
     const [showDocker, setShowDocker] = useState<boolean>(true);
     const [backgroundHue, setBackgroundHue] = useState<number>(200);
 
@@ -28,6 +30,9 @@ export function OngakuProvider(
             value={{
                 lightMode,
                 setLightMode,
+                rainbowMode,
+                setRainbowMode,
+
                 showDocker,
                 setShowDocker,
                 backgroundHue,
