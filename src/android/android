@@ -1,0 +1,17 @@
+import AudioRegistry from "../audio/audio.registry";
+import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
+import { useEffect } from "react";
+
+export function useAndroidLifecycleHandler() {
+    useEffect(() => {
+        const appWindow = getCurrentWebviewWindow();
+
+        const unlistenClose = appWindow.onCloseRequested(() => {
+            AudioRegistry.stopAll();
+        });
+
+        return () => {
+            unlistenClose.then(f => f());
+        };
+    }, []);
+}

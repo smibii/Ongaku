@@ -1,4 +1,4 @@
-import AudioMetadata from "../audiometa/audiometa.type";
+import AudioMetadata from "../audio/audio.meta.type";
 
 export default interface IOngakuContext {
     lightMode: boolean;

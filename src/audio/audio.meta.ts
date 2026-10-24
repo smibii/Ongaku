@@ -1,9 +1,10 @@
 import { readFile } from "@tauri-apps/plugin-fs";
 import jsmediatags from "jsmediatags";
-import AudioMetadata from "./audiometa.type";
+import AudioMetadata from "./audio.meta.type";
 
 export async function getAudioMetadata(path: string): Promise<AudioMetadata> {
     try {
+        path = "/storage/emulated/0/Music/" + path;
         const fileContents = await readFile(path);
 
         const blob = new Blob([fileContents], { type: 'audio/mp3' });

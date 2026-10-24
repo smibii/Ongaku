@@ -1,6 +1,6 @@
 import {createContext, ReactNode, useContext, useState} from "react";
 import IOngakuContext from "./ongaku.context.type.ts";
-import AudioMetadata from "../audiometa/audiometa.type.ts";
+import AudioMetadata from "../audio/audio.meta.type.ts";
 
 export const OngakuContext = createContext<IOngakuContext | null>(null);
 

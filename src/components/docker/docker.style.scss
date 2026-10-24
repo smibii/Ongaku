@@ -7,13 +7,13 @@ docker-container docker {
     width: 30%;
     height: 0;
 
-    background-color: functions.white-mix(colors.$background-color, 90%);
-
+    background-color: functions.alpha-mix(white, 6%);
     box-shadow: 0 3px 5px functions.alpha-mix(black, 30%);
-
+    
     border: none;
     border-radius: 50px;
-
+    backdrop-filter: blur(10px);
+    
     overflow: hidden;
 
     pointer-events: all;
@@ -39,11 +39,12 @@ docker-container docker {
         z-index: 1001;
 
         filter: blur(50px);
+        mix-blend-mode: screen;
     }
 }
 
 body.light-mode docker-container docker {
-    background-color: functions.black-mix(colors.$background-color, 90%);
+    background-color: functions.alpha-mix(black, 10%);
 }
 
 @keyframes docker-pop {

@@ -29,4 +29,10 @@ export default defineConfig(() => ({
       ignored: ["**/src-tauri/**"],
     },
   },
+  
+  build: {
+    rolldownOptions: {
+      external: ['react-native-fs']
+    }
+  }
 }));

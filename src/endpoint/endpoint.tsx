@@ -2,12 +2,34 @@ import { ReactNode, useEffect, useRef } from "react";
 import { Route, Routes } from "react-router-dom";
 import allowedEndpoints from "./endoint.constant.tsx";
 import { useOngaku } from "../providers/ongaku.context.tsx";
+import { JSX } from "react/jsx-dev-runtime";
+import { initMediaNotification } from "../notification/notification.ts";
 
 export default function EndpointNode(): ReactNode {
     const ongaku = useOngaku();
 
     const animationRef = useRef<number | null>(null);
     const hueRef = useRef<number>(parseInt(document.body.style.getPropertyValue("--hue")) || 0);
+
+    useEffect(() => {
+        initMediaNotification(
+            () => {
+                ongaku.player.setIsPlaying(ongaku.player.isPlaying);
+            },
+            () => {
+
+            },
+            () => {
+
+            },
+            () => {
+
+            },
+            () => {
+
+            }
+        );
+    }, []);
 
     useEffect(() => {
         document.body.className = ongaku.lightMode ? "light-mode" : "";
@@ -38,6 +60,17 @@ export default function EndpointNode(): ReactNode {
         };
     }, [ongaku.rainbowMode]);
 
+    useEffect(() => {
+        if (!ongaku.player.currentSong) return;
+        const song = ongaku.player.currentSong;
+
+        if (!song.audio) return;
+        const audio = song.audio;
+
+        if (audio.audioElement.paused && ongaku.player.isPlaying) audio.audioElement.play();
+        else if (!audio.audioElement.paused && !ongaku.player.isPlaying) audio.audioElement.pause();
+    }, [ongaku.player.isPlaying]);
+
     return (
         <Routes>
             { _mapEndpoints() }
@@ -45,7 +78,7 @@ export default function EndpointNode(): ReactNode {
     );
 }
 
-function _mapEndpoints(): React.JSX.Element[] {
+function _mapEndpoints(): JSX.Element[] {
     return allowedEndpoints.map(
         (point, index) => {
             return (
