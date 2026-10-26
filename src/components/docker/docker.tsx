@@ -1,49 +1,68 @@
-import { ReactNode, useEffect } from "react";
-import "./docker.style.scss";
+import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import IDockerParam from "./docker.type";
 import { useOngaku } from "../../providers/ongaku.context";
+import { usePlayer } from "../../providers/player.context";
 import DockerBody from "./docker.body";
-import { createAudioFromPath } from "../../audio/audio";
+import "./docker.style.scss";
 
-export default function Docker(): ReactNode {
+export default function Docker(
+    { meta, type }: IDockerParam
+) : ReactNode {
     const ongaku = useOngaku();
+    const player = usePlayer();
 
-    const cover = "https://i.scdn.co/image/ab67616d00001e020b6b1eb7f04cd1c433dd596e";
+    const isCurrent = type === "current";
+
+    const ref = useRef<HTMLElement>(null);
+    const [intersectionRatio, setIntersectionRatio] = useState<number>(0);
+
+    const observer = useMemo(() =>
+        new IntersectionObserver(
+            ([entry]) => {
+                setIntersectionRatio(entry.intersectionRatio)
+            }
+        )
+    , [ref]);
 
     useEffect(() => {
-        // ongaku.player.setCurrentSong({
-        //     artist: "Unknown",
-        //     coverUrl: cover,
-        //     path: "",
-        //     title: "Some Title"
-        // });
-    }, []);
+        if (isCurrent || !ref.current) return;
+        observer.observe(ref.current);
+        return () => observer.disconnect();
+    }, [ ref ]);
 
     useEffect(() => {
-        if (!ongaku.player.currentSong) return;
+        if (isCurrent || !intersectionRatio
+            || Date.now() - player.lastSongChange < 400) return;
 
-        const song = ongaku.player.currentSong;
-        createAudioFromPath(song.path)
-            .then(audio => {
-                song.audio = audio;
-                audio.audioElement.onended = () => { ongaku.player.setIsPlaying(false) };
-                ongaku.player.setIsPlaying(true);
-                ongaku.player.setCurrentSong(song);
-            })
-    }, [ongaku.player.currentSong]);
+        setTimeout(() => {
+            if (meta) {
+                if (type === "next") player.next();
+                else player.previous();
+            }
+
+            if (meta) return;
+            const scroll = document.getElementsByTagName("docker-scroll")[0];
+            scroll.children[1].scrollIntoView({
+                behavior: "smooth"
+            });
+        }, meta ? 700 : 300);
+    }, [ intersectionRatio ]);
 
     return (
         <docker
+            ref={ ref }
             className={
-                ongaku.showDocker && ongaku.player.currentSong 
+                !isCurrent && Date.now() - player.lastSongChange < 400 || 
+                meta && ongaku.showDocker && player.currentSong 
                     ? "active" : ""
             }
         >
-            { ongaku.player.currentSong && (
+            { meta && (
                 <>
-                    <DockerBody meta={ ongaku.player.currentSong! } />
+                    <DockerBody meta={ meta } type={ type } />
 
                     <halo>
-                        <img src={ ongaku.player.currentSong?.coverUrl! } loading="lazy" />
+                        <img src={ meta.coverUrl! } loading="lazy" />
                     </halo>
                 </>
             )}

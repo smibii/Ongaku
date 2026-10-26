@@ -63,5 +63,11 @@
     "fs:read-all",
     "fs:read-app-specific-dirs-recursive",
     "fs:read-files"
-  ]
+  ],
+  "scope": {
+    "fs": [
+      "$HOME/**",
+      "/storage/emulated/0/**"
+    ]
+  }
 }

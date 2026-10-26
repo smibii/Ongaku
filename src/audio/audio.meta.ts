@@ -1,10 +1,10 @@
 import { readFile } from "@tauri-apps/plugin-fs";
 import jsmediatags from "jsmediatags";
 import AudioMetadata from "./audio.meta.type";
+import defaultCover from "../assets/default-cover.png";
 
 export async function getAudioMetadata(path: string): Promise<AudioMetadata> {
     try {
-        path = "/storage/emulated/0/Music/" + path;
         const fileContents = await readFile(path);
 
         const blob = new Blob([fileContents], { type: 'audio/mp3' });
@@ -25,7 +25,7 @@ export async function getAudioMetadata(path: string): Promise<AudioMetadata> {
                     resolve({
                         title: title || 'Unknown Title',
                         artist: artist || 'Unknown Artist',
-                        coverUrl: coverUrl,
+                        coverUrl: coverUrl || defaultCover,
                         path
                     });
                 },

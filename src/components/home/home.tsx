@@ -1,72 +1,102 @@
 import { ReactNode } from "react";
 import { useOngaku } from "../../providers/ongaku.context.tsx";
+import { usePlayer } from "../../providers/player.context.tsx";
+import { useDirectory } from "../../providers/directory.context.tsx";
 import "./home.style.scss";
-import { getAudioMetadata } from "../../audio/audio.meta.ts";
-import { unloadAudioElement } from "../../audio/audio.ts";
-import AudioRegistry from "../../audio/audio.registry.ts";
 
 export default function Home(): ReactNode {
     const ongaku = useOngaku();
+    const player = usePlayer();
+    const directory = useDirectory();
 
     return (
         <home>
-            <button
-                onClick={
-                    () => {
-                        ongaku.setShowDocker(!ongaku.showDocker);
-                    }
-                }
-            >
-                Click!
-            </button>
+            <content>
 
-            <button
-                onClick={
-                    () => {
-                        ongaku.setLightMode(!ongaku.lightMode);
+                <button
+                    onClick={
+                        () => {
+                            ongaku.setShowDocker(!ongaku.showDocker);
+                        }
                     }
-                }
-            >
-                Light Mode
-            </button>
+                >
+                    Click!
+                </button>
 
-            <button
-                onClick={
-                    () => {
-                        ongaku.setRainbowMode(!ongaku.rainbowMode);
+                <button
+                    onClick={
+                        () => {
+                            ongaku.setLightMode(!ongaku.lightMode);
+                        }
                     }
-                }
-            >
-                Rainbow
-            </button>
+                >
+                    Light Mode
+                </button>
 
-            <input
-                type="range"
-                max={ 355 }
-                onChange={
-                    e => {
-                        ongaku.setBackgroundHue(parseInt(e.target.value));
+                <button
+                    onClick={
+                        () => {
+                            ongaku.setRainbowMode(!ongaku.rainbowMode);
+                        }
                     }
-                } 
-            />
+                >
+                    Rainbow
+                </button>
 
-            <input
-                onInput={
-                    e => {
-                        getAudioMetadata(e.currentTarget.value)
-                            .then(meta => {
-                                AudioRegistry.stopAll();
-                                unloadAudioElement(ongaku.player.currentSong?.audio?.audioElement!);
-                                ongaku.player.setCurrentSong(null);
-                                ongaku.player.setIsPlaying(false);
-                                ongaku.player.setCurrentSong(meta);
-                            })
-                            .catch(e => {
-                                console.log(e);
-                            })
+                <input
+                    type="range"
+                    max={ 355 }
+                    onChange={
+                        e => {
+                            ongaku.setBackgroundHue(parseInt(e.target.value));
+                        }
+                    } 
+                />
+
+                <input
+                    onInput={
+                        e => {
+                            player.loadSongByPath(e.currentTarget.value);
+                        }
                     }
+                />
+
+                {/* <input
+                    onInput={
+                        e => {
+                            player.loadPlaylistPath(e.currentTarget.value);
+                        }
+                    }
+                /> */}
+
+                <textarea
+                    onInput={
+                        e => {
+                            player.setPlaylist(e.currentTarget.value.split("?"));
+                        }
+                    }
+                />
+
+                {directory.currentPath}
+                {
+                    directory.currentDirectory?.files.map((f, i) => {
+                        return (
+                            <button
+                                key={i}
+                                onClick={() => {
+                                    if (f.isDir) directory.goToDirectory(f.path);
+                                    else {
+                                        const paths = directory.getFilePaths();
+                                        player.setPlaylist(paths);
+                                    }
+                                }}
+                            >
+                                {f.name} {f.isDir ? "Directory" : "File"}
+                            </button>
+                        );
+                    })
                 }
-            />
+            </content>
         </home>
     );
 }

@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import ProgressBarParam from "./progressbar.parameters";
+import ProgressBarParam from "./progressbar.type";
 import "./progressbar.style.scss"
 
 export default function ProgressBar({

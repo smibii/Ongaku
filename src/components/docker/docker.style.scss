@@ -1,11 +1,12 @@
 @use "../../colors.scss";
 @use "../../functions.scss";
 
-docker-container docker {
+docker-scroll docker-container docker {
     position: relative;
 
     width: 30%;
     height: 0;
+    margin: 0 10px;
 
     background-color: functions.alpha-mix(white, 6%);
     box-shadow: 0 3px 5px functions.alpha-mix(black, 30%);
@@ -15,17 +16,12 @@ docker-container docker {
     backdrop-filter: blur(10px);
     
     overflow: hidden;
-
-    pointer-events: all;
+    animation: docker-pop-rev 200ms ease-out forwards;
 
     &.active {
         animation: docker-pop 200ms ease-out forwards;
     }
     
-    animation: docker-pop-rev 200ms ease-out forwards;
-
-    // transition: width 300ms ease-out, height 200ms ease-out, border-radius 200ms ease-out;
-
     halo img {
         position: absolute;
         display: flex;
@@ -43,7 +39,7 @@ docker-container docker {
     }
 }
 
-body.light-mode docker-container docker {
+body.light-mode docker-scroll docker-container docker {
     background-color: functions.alpha-mix(black, 10%);
 }
 
@@ -54,16 +50,16 @@ body.light-mode docker-container docker {
         border-radius: 30px;
     }
     100% {
-        height: 95%;
-        width: 95%;
+        height: 100%;
+        width: 100%;
         border-radius: 10px;
     }
 }
 
 @keyframes docker-pop-rev {
     0% {
-        height: 95%;
-        width: 95%;
+        height: 100%;
+        width: 100%;
         border-radius: 10px;
     }
     50% {

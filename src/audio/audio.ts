@@ -62,7 +62,7 @@ export function unloadAudioElement(audioElement: HTMLAudioElement | null) {
 
         if (currentSrc.startsWith('blob:')) {
             URL.revokeObjectURL(currentSrc);
-            console.log("Memory cleared: Revoked resource allocation", currentSrc);
+            console.info("Memory cleared: Revoked resource allocation", currentSrc);
         }
     } catch (error) {
         console.error("Failed to cleanly release audio memory block:", error);

@@ -1,99 +1,100 @@
 import { ReactNode, useEffect, useState } from "react";
-import { FaHeart, FaRegHeart, FaPlay, FaPause } from "react-icons/fa";
+import IDockerParam from "./docker.type";
+import { FaHeart, FaRegHeart, FaPlay, FaPause, FaLongArrowAltRight } from "react-icons/fa";
 import ProgressBar from "../progressbar/progressbar";
+import { usePlayer } from "../../providers/player.context";
 import "./docker.body.style.scss";
-import AudioMetadata from "../../audio/audio.meta.type";
-import { useOngaku } from "../../providers/ongaku.context";
-import { setMediaPosition, setMediaTrack } from "../../notification/notification";
+import { FaArrowDownWideShort, FaArrowsRotate, FaShuffle } from "react-icons/fa6";
 import { RepeatMode } from "tauri-plugin-media-api";
+import { ImLoop } from "react-icons/im";
 
-export default function DockerBody({
-        meta
-    }: { meta: AudioMetadata }
+export default function DockerBody(
+    { meta, type }: IDockerParam
 ): ReactNode {
-    const ongaku = useOngaku();
-    const [currentTime, setCurrentTime] = useState<number>(0);
+    const player = usePlayer();
+    const [isFavorite, setIsFavorite] = useState<boolean>(player.isFavorite(meta?.path!));
 
-    const song = ongaku.player.currentSong;
-    const currentAudioWrapper = song?.audio;
-    const durationSec = currentAudioWrapper?.durationSec || 0;
-    const audioElement = currentAudioWrapper?.audioElement || null;
+    const audio = player.audio;
+    const durationSec = audio?.durationSec || 0;
 
-    useEffect(() => {
-        if (!audioElement) {
-            setCurrentTime(0);
-            return;
-        }
+    const progressPercent = player.audio && durationSec > 0 ?
+        (player.songPosition / player.audio.durationSec) * 100 : 0;
 
-        const handleTimeUpdate = () => {
-            setCurrentTime(audioElement.currentTime);
-            setMediaPosition(audioElement.currentTime);
-        };
-
-        audioElement.addEventListener("timeupdate", handleTimeUpdate);
-        setCurrentTime(audioElement.currentTime);
-
-        if (song)
-            setMediaTrack({
-                title: song.title,
-                artist: song.artist,
-                cover: song.coverUrl!,
-                duration: song.audio?.durationSec!,
-                playing: ongaku.player.isPlaying,
-                shuffle: false,
-                loop: RepeatMode.None
-            });
-
-        return () => {
-            audioElement.removeEventListener("timeupdate", handleTimeUpdate);
-        };
-    }, [audioElement]);
+    const isCurrent = type === "current";
 
     useEffect(() => {
-        if (!audioElement) return;
-
-        if (ongaku.player.isPlaying && audioElement.paused) {
-            audioElement.play().catch((err) => console.log("Playback interrupted:", err));
-        } else if (!ongaku.player.isPlaying && !audioElement.paused) {
-            audioElement.pause();
-        }
-    }, [ongaku.player.isPlaying, audioElement]);
-
-    const progressPercent = durationSec > 0 ? (currentTime / durationSec) * 100 : 0;
+        if (!meta) return;
+        setIsFavorite(player.isFavorite(meta.path));
+    }, [ meta, player.favoriteList ]);
 
     return (
         <docker-body>
             <content>
                 <info>
-                    <img src={ meta.coverUrl || undefined } loading="lazy" alt="Cover" />
+                    <img src={ meta!.coverUrl || undefined } loading="lazy" alt="Cover" />
                     <text>
                         <song-title>
-                            <marquee scrollamount="2">
-                                { meta.title }
-                            </marquee>
+                            {
+                                !isCurrent ? meta!.title : 
+                                <marquee scrollamount="2">
+                                    { meta!.title }
+                                </marquee>
+                            }
                         </song-title>
                         <artist-name>
-                            • { meta.artist }
+                            • { meta!.artist }
                         </artist-name>
                     </text>
                 </info>
-
+                
                 <actions>
-                    <button>
-                        <FaHeart />
+                    <button
+                        onClick={() => {
+                            if (!meta || !isCurrent) return;
+                            if (!isFavorite) player.setFavorite(meta.path);
+                            else player.setUnfavorite(meta.path);
+                            setIsFavorite(!isFavorite);
+                        }}
+                    >
+                        { isFavorite ? <FaHeart /> : <FaRegHeart /> }
                     </button>
                     <button
                         onClick={() => {
-                            ongaku.player.setIsPlaying(!ongaku.player.isPlaying);
+                            player.setIsShuffle(!player.isShuffle);
                         }}
                     >
-                        { !ongaku.player.isPlaying ? <FaPlay /> : <FaPause /> }
+                        { player.isShuffle ? <FaShuffle /> : <FaLongArrowAltRight /> }
+                    </button>
+                    <button
+                        onClick={() => {
+                            if (!isCurrent) return;
+                            player.setLoopMode(
+                                player.loopMode === RepeatMode.None ?
+                                    RepeatMode.List :
+                                        player.loopMode === RepeatMode.List ?
+                                            RepeatMode.Track  :
+                                            RepeatMode.None );
+                        }}
+                    >
+                        { player.loopMode === RepeatMode.None ?
+                            <FaArrowDownWideShort /> :
+                                player.loopMode === RepeatMode.List ?
+                                    <ImLoop /> :
+                                    <FaArrowsRotate /> }
+                    </button>
+                    <button
+                        onClick={() => {
+                            if (!isCurrent) return;
+                            player.setIsPlaying(!player.isPlaying);
+                        }}
+                    >
+                        { isCurrent && player.isPlaying ? <FaPause /> : <FaPlay /> }
                     </button>
                 </actions>
             </content>
-
+            
             <ProgressBar 
-                value={progressPercent}
+                value={ isCurrent ? progressPercent : 0 }
                 height="3px"
             />
         </docker-body>

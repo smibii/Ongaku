@@ -1,6 +1,6 @@
 @use "../../colors.scss";
 
-docker-container docker docker-body {
+docker-scroll docker-container docker docker-body {
     position: absolute;
     display: flex;
 
@@ -29,7 +29,7 @@ docker-container docker docker-body {
         info {
             display: flex;
 
-            width: 60%;
+            width: 50%;
 
             gap: 10px;
 
@@ -45,7 +45,7 @@ docker-container docker docker-body {
             text {
                 display: flex;
                 
-                max-width: 80%;
+                max-width: 50%;
 
                 justify-content: center;
 
@@ -62,6 +62,12 @@ docker-container docker docker-body {
                     font-size: 14px;
                     font-weight: 800;
                     line-height: 14px;
+
+                    text-overflow: ellipsis;
+
+                    marquee {
+                        text-overflow: clip;
+                    }
                 }
 
                 artist-name {
@@ -106,6 +112,6 @@ docker-container docker docker-body {
     }
 }
 
-docker-container docker.active docker-body {
+docker-scroll docker-container docker.active docker-body {
     opacity: 1;
 }

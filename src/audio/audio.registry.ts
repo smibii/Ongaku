@@ -18,7 +18,6 @@ const AudioRegistry = {
             }
         });
         activeAudios.clear();
-        console.log("Android & Windows Audio Registry swept clean.");
     }
 };
 

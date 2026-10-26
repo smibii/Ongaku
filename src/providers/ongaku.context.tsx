@@ -1,6 +1,6 @@
-import {createContext, ReactNode, useContext, useState} from "react";
+import {createContext, ReactNode, useContext, useEffect, useRef, useState} from "react";
 import IOngakuContext from "./ongaku.context.type.ts";
-import AudioMetadata from "../audio/audio.meta.type.ts";
+import IContextParam from "./context.type.ts";
 
 export const OngakuContext = createContext<IOngakuContext | null>(null);
 
@@ -10,20 +10,58 @@ export function useOngaku(): IOngakuContext {
     return context;
 }
 
-export function OngakuProvider(
-    { children }: { children: ReactNode }
+export default function OngakuProvider(
+    { children }: IContextParam
 ): ReactNode {
+    /*
+     * Export states
+     */
     const [lightMode, setLightMode] = useState<boolean>(false);
     const [rainbowMode, setRainbowMode] = useState<boolean>(false);
 
     const [showDocker, setShowDocker] = useState<boolean>(true);
     const [backgroundHue, setBackgroundHue] = useState<number>(200);
-
-    const [isPlaying, setIsPlaying] = useState<boolean>(false);
     
-    const [currentSong, setCurrentSong] = useState<AudioMetadata | null>(null);
-    const [nextSong, setNextSong] = useState<AudioMetadata | null>(null);
-    const [previousSong, setPreviousSong] = useState<AudioMetadata | null>(null);
+    /*
+     * Hue rainbow shift states
+     */
+    const animationRef = useRef<number | null>(null);
+    const hueRef = useRef<number>(parseInt(document.body.style.getPropertyValue("--hue")) || 0);
+
+    /*
+     * Hue rainbow shift animation
+     */
+    useEffect(() => {
+        if (rainbowMode) {
+            const loop = () => {
+                hueRef.current = (hueRef.current + 0.5) % 360; 
+                document.body.style.setProperty("--hue", Math.floor(hueRef.current).toString());
+                animationRef.current = requestAnimationFrame(loop);
+            };
+            
+            animationRef.current = requestAnimationFrame(loop);
+        } else {
+            if (animationRef.current) {
+                document.body.style.setProperty("--hue", backgroundHue.toString());
+                cancelAnimationFrame(animationRef.current);
+                animationRef.current = null;
+            }
+        }
+
+        return () => {
+            if (animationRef.current) {
+                cancelAnimationFrame(animationRef.current);
+            }
+        };
+    }, [rainbowMode]);
+
+    /*
+     * Hue update
+     */
+    useEffect(() => {
+        document.body.className = lightMode ? "light-mode" : "";
+        document.body.style.setProperty("--hue", backgroundHue.toString());
+    }, [lightMode, backgroundHue]);
 
     return (
         <OngakuContext.Provider
@@ -36,19 +74,7 @@ export function OngakuProvider(
                 showDocker,
                 setShowDocker,
                 backgroundHue,
-                setBackgroundHue,
-
-                player: {
-                    isPlaying,
-                    setIsPlaying,
-
-                    currentSong,
-                    setCurrentSong,
-                    nextSong,
-                    setNextSong,
-                    previousSong,
-                    setPreviousSong
-                }
+                setBackgroundHue
             }}
         >
             { children }

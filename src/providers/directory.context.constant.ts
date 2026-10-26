@@ -1,0 +1,1 @@
+export const MusicBaseDir: string = "/storage/emulated/0/Music";

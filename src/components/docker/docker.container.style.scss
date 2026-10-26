@@ -1,11 +1,13 @@
-docker-container {
+docker-scroll docker-container {
     display: flex;
+    flex-shrink: 0;
 
     align-items: end;
     justify-content: center;
 
-    width: 100%;
+    width: 100vw;
     height: 65px;
 
-    // overflow: hidden;
+    scroll-snap-stop: normal;
+    scroll-snap-align: center;
 }
